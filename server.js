@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const app = express();
 require('dotenv').config()
@@ -18,62 +16,55 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public")); //serves the content of my public folder.
 
 
-app.get('/', (req, res) => {res.send("Hello its me . . . the server ")
+app.get('/', (req, res) => {res.send(`${req} :This is server info`)
 });
 
 app.get("/reply", (req, res) => {
-  let data = "this is server data, cuz";
+  let data = "this is the /reply endpoint";
   res.send(data)
-  console.log("new shit");
 });
 
-// app.post('/webhooks/sms' , (req, res) => {
-  
-//   console.log(req.body);
-  
-//  const twiml = new MessagingResponse();
-
-//   twiml.message('The Robots are coming! Head for the hills!');
-
-//   res.writeHead(200, {'Content-Type': 'text/xml'});
-//   res.end(twiml.toString());
-// });
-
-app.post('/hooks/sms', (req, res) => {
+//hooks/sms is a webhook being hit by Twilio each time a message is received
+app.post('/hooks/sms', async (req, res) => {
   console.log(req.body);
+  let incomingTextContent = await req.body.Body;
+  updateColor(incomingTextContent);
   
   const twiml = new MessagingResponse();
-
   twiml.message('Tyi: Always do the right thing. -Nellzus');
-
-  res.writeHead(200, {'Content-Type': 'text/xml'});
+  // res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
 });
 
-app.get('/hooks/sms', (req, res) => {
-    let data = "Make a POST to this page cuz";
 
+
+let colors = "red";
+function updateColor(incomingTextContent) {
+  colors = incomingTextContent;
+}
+
+app.get('/colors', async (req, res) => {
+    console.log("color info is: " + colors)
+  res.json(colors)
+})
+
+app.get('/hooks/sms', (req, res) => {
+  let data = "Make a POST to this page cuz";
   res.send(data);
 })
 
-app.post('/text:clientPhoneNumber', (req, res) => {
-  //need validation on here too
-  let outboundPhoneNumber = req.params.clientPhoneNumber; 
-  sendText(outboundPhoneNumber)
-  
-})
 
+// app.post('/text:clientPhoneNumber', (req, res) => {
+//   need validation on here too
+//   let outboundPhoneNumber = req.params.clientPhoneNumber; 
+//   sendText(outboundPhoneNumber)
+//   res.send(`${outboundPhoneNumber}`)
+//   const twiml = new MessagingResponse();
+//   twiml.message(``)
+//   res.writeHead(200, {'Content-Type': 'text/xml'});
+//   res.end(twiml.toString());
+// })
 
-
-function sending() {
-  client.messages
-  .create({
-     body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-     from: '+14257287345',
-     to:  '+460760009866'
-   })
-  .then(message => console.log(message.sid));
-}
 
 
 const port = process.env.PORT || 3007;
@@ -81,29 +72,7 @@ const listener = app.listen(port, () => {
   console.log(`TextMe App running on:${port}`);
 });
 
-// app.post('webhooks/sms', function(req, res) {
-//   // var twilio = require('twilio');
-//   const twiml = new twilio.TwimlResponse();
-//   twiml.message('The Robots are coming! Head for the hills!');
-//   res.writeHead(200, {'Content-Type': 'text/xml'});
-//   res.end(twiml.toString());
-// });
 
-
-
-
-
-function sendText(phoneNumber) {
-  let message = 'To act without hesitation, to do what is right';
-client.messages
-  .create({
-     body: `${message}`,
-     from: '+14257287345',
-     to:  `+${phoneNumber}`
-   })
-  .then(message => console.log(message.sid));
-}
-
-
-client.messages.list({limit: 20})
-               .then(messages => messages.forEach(m => console.log(m.sid)));
+client.messages.list({limit: 10})
+               .then(messages => messages.forEach(m => 
+        console.log(m.sid, m.status, m.dateSent, m.to, m.price )));
