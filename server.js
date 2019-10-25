@@ -36,7 +36,7 @@ app.post("/hooks/sms", async (req, res) => {
 
   const twiml = new MessagingResponse();
   twiml.message(
-    `Click the Update page color button to see your color: ${req.body.Body}`
+    `Click the Update page color button to see your color: ${inputColor}`
   );
   res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(twiml.toString());
@@ -71,6 +71,27 @@ app.get("/hooks/sms", (req, res) => {
   let data = "Make a POST to this page cuz";
   res.send(data);
 });
+
+
+app.get('/colorsList', (res, req) => {
+  console.log("colorlist requested")
+  let colorResults = fiveColorArray();
+  console.log(colorResults)
+  req.json(colorResults);
+})
+
+function fiveColorArray() {
+  let fiveColors = [];
+  for(let i = 0; i < 5; i += 1) {
+    let randomElement = getRandomInt(CssColorNames.length);
+    fiveColors.push(CssColorNames[randomElement])
+  }
+  return fiveColors
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 // app.post('/text:clientPhoneNumber', (req, res) => {
 //   //need validation on here too
