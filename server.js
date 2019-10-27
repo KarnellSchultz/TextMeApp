@@ -15,7 +15,7 @@ const listener = app.listen(port, () => {
 });
 
 app.use(express.urlencoded({ extended: false }));
-// app.use(express.json({ limit: "100kb" })); //keeps ppl from blowing me up
+app.use(express.json({ limit: "100kb" })); //keeps ppl from blowing me up
 app.use(express.static("public")); //serves the content of my public folder.
 
 app.get("/", (req, res) => {
