@@ -35,6 +35,10 @@ html {
   align-items: center;
   padding-right: 2rem;
 }
+.nav-container:hover{
+  background: #faffe8;
+  transition-duration: 0.6s;
+}
 .nav {
   width: 300px;
   display: flex;
@@ -85,7 +89,7 @@ html {
 }
 
 .header {
-  background-color: rgb(52, 141, 174);
+  background: #dfff6b;
   box-shadow: 4px 4px 2px 1px rgba(0, 0, 255, 0.2);
   width: 100%;
   height: 80px;
@@ -134,14 +138,12 @@ html {
   height: 200px;
 }
 .footer-section {
-  height: 140px;
+  height: 80px;
 }
 
 .footer-container {
   width: 100%;
   height: 48px;
-
-  position: fixed;
   bottom: 0;
 }
 .footer {
@@ -149,7 +151,7 @@ html {
   display: flex;
   justify-content: center;
   border: 1px rgb(223, 223, 223);
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: #000000bf;
   z-index: 1000;
   order: 4;
   position: fixed;
@@ -164,7 +166,9 @@ html {
 ul {
   list-style: none;
 }
-
+a {
+  text-decoration: none;
+}
 button:hover {
   background-color: #dfff6b;
   border-radius: 9px;
@@ -177,8 +181,6 @@ button:focus {
 }
 
 @media only screen and (max-width: 400px) {
-
-
 }
 
 @media only screen and (min-width: 401px) and (max-width: 960px) {

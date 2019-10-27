@@ -73,17 +73,17 @@ app.get("/hooks/sms", (req, res) => {
 });
 
 
-app.get('/colorsList', (res, req) => {
+app.get('/colorsList', (req, res) => {
   console.log("colorlist requested")
   let colorResults = fiveColorArray();
   console.log(colorResults)
-  req.json(colorResults);
+  res.json(colorResults);
 })
 
 function fiveColorArray() {
   let fiveColors = [];
-  for(let i = 0; i < 5; i += 1) {
-    let randomElement = getRandomInt(CssColorNames.length);
+  for(let i = 1; i <= 5; i += 1) {
+    let randomElement = getRandomInt(CssColorNames.length - 1 );
     fiveColors.push(CssColorNames[randomElement])
   }
   return fiveColors
@@ -105,9 +105,9 @@ function getRandomInt(max) {
 
 // })
 
-// client.messages.list({limit: 20})
-//                .then(messages => messages.forEach(m =>
-//         console.log(m.sid, m.status, m.dateSent, m.to, m.price )));
+client.messages.list({limit: 20})
+               .then(messages => messages.forEach(m =>
+        console.log(m.sid, m.status, m.dateSent, m.to, m.price )));
 
 
 const CssColorNames = [
