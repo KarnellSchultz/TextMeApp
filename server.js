@@ -3,6 +3,10 @@ const app = express();
 require("dotenv").config();
 const accountSid = process.env.ACCOUNTSID;
 const authToken = process.env.AUTHTOKEN;
+const Datastore = require('nedb')
+  , db = new Datastore({ filename: 'database.db', autoload: true });
+
+ 
 
 const MessagingResponse = require("twilio").twiml.MessagingResponse;
 const client = require("twilio")(accountSid, authToken);
@@ -15,7 +19,7 @@ const listener = app.listen(port, () => {
 });
 
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json({ limit: "100kb" })); //keeps ppl from blowing me up
+// app.use(express.json({ limit: "100kb" })); //keeps ppl from blowing me up
 app.use(express.static("public")); //serves the content of my public folder.
 
 app.get("/", (req, res) => {
@@ -31,17 +35,32 @@ app.get("/reply", (req, res) => {
 app.post("/hooks/sms", async (req, res) => {
   console.log(req.body);
   let incomingTextContent = await req.body.Body;
-  let inputColor = validateIncomingText(incomingTextContent); //gets the CSS color from the text
+  let inputColor = validateIncomingText(incomingTextContent);
+  
+  //attempting to protect against users sending bad inputs and a sms sending anyway.
+  if (inputColor == undefined) {
+   console.log("Received a bad input")
+   db.insert({
+     status: "404",
+     error: incomingTextContent, 
+    request: req.body,
+    timestamp: new Date().toLocaleDateString()})
+  } else {
+    db.insert({
+      status: "200",
+      request: req.body,
+      color: inputColor,
+      timestamp: new Date().toLocaleDateString()
+    })
   updateColor(inputColor);
-
   const twiml = new MessagingResponse();
   twiml.message(
     `Click the Update page color button to see your color: ${inputColor}`
   );
   res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(twiml.toString());
+  }
 });
-
 
 
 function validateIncomingText(userTextInput) {
@@ -93,21 +112,9 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-// app.post('/text:clientPhoneNumber', (req, res) => {
-//   //need validation on here too
-//   let outboundPhoneNumber = req.params.clientPhoneNumber;
-//   sendText(outboundPhoneNumber)
-//   res.send(`${outboundPhoneNumber}`)
-//   const twiml = new MessagingResponse();
-//   twiml.message(``)
-//   res.writeHead(200, {'Content-Type': 'text/xml'});
-//   res.end(twiml.toString());
-
-// })
-
-client.messages.list({limit: 20})
-               .then(messages => messages.forEach(m =>
-        console.log(m.sid, m.status, m.dateSent, m.to, m.price )));
+// client.messages.list({limit: 20})
+//                .then(messages => messages.forEach(m =>
+//         console.log(m.sid, m.status, m.dateSent, m.to, m.price )));
 
 
 const CssColorNames = [
