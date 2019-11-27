@@ -5,7 +5,7 @@ const moreColors = document.getElementById("more-colors");
 const moreColorsButton = document.getElementById("more-colors-button");
 const colorItem = document.getElementById("color-item");
 
-let color = "Sienna";
+let color = "plum";
 pageElement.style.background = color;
 upcomingcolor.innerHTML = color;
 updateButton.addEventListener("click", updateColors);
@@ -47,6 +47,7 @@ let secret = new Vue({
     message: ""
   }
 })
+
 
 moreColorsButton.addEventListener("click", vueListUpdate);
 

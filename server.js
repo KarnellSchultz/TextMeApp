@@ -82,8 +82,9 @@ function updateColor(incomingTextContent) {
 }
 
 app.get("/colors", async (req, res) => {
-  console.log("color info is: " + colors);
-  res.json(colors);
+  if(colors !== undefined) {
+    console.log("color info is: " + colors);
+    res.json(colors); }
 });
 
 app.get("/hooks/sms", (req, res) => {
