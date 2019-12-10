@@ -3,10 +3,8 @@ const app = express();
 require("dotenv").config();
 const accountSid = process.env.ACCOUNTSID;
 const authToken = process.env.AUTHTOKEN;
-const Datastore = require('nedb')
-  , db = new Datastore({ filename: 'database.db', autoload: true });
-
- 
+const Datastore = require("nedb"),
+  db = new Datastore({ filename: "database.db", autoload: true });
 
 const MessagingResponse = require("twilio").twiml.MessagingResponse;
 const client = require("twilio")(accountSid, authToken);
@@ -38,33 +36,38 @@ app.post("/hooks/sms", async (req, res) => {
   let inputColor = validateIncomingText(incomingTextContent);
 
   let { boody } = req.body;
-  console.log(boody)
-  
+  console.log(boody);
+
   //attempting to protect against users sending bad inputs and a sms sending anyway.
   if (inputColor == undefined) {
-   console.log("Received a bad input")
-   db.insert({
-     status: "404",
-     error: incomingTextContent, 
-    request: [req.body.ToCountry,req.body.ToState, req.body.SmsStatus, req.body.Body ,],
-    timestamp: new Date().toLocaleDateString()})
+    console.log("Received a bad input");
+    db.insert({
+      status: "404",
+      error: incomingTextContent,
+      request: [
+        req.body.ToCountry,
+        req.body.ToState,
+        req.body.SmsStatus,
+        req.body.Body
+      ],
+      timestamp: new Date().toLocaleDateString()
+    });
   } else {
     db.insert({
       status: "200",
       request: req.body,
       color: inputColor,
       timestamp: new Date().toLocaleDateString()
-    })
-  updateColor(inputColor);
-  const twiml = new MessagingResponse();
-  twiml.message(
-    `Click the Update page color button to see your color: ${inputColor}`
-  );
-  res.writeHead(200, { "Content-Type": "text/xml" });
-  res.end(twiml.toString());
+    });
+    updateColor(inputColor);
+    const twiml = new MessagingResponse();
+    twiml.message(
+      `Click the Update page color button to see your color: ${inputColor}`
+    );
+    res.writeHead(200, { "Content-Type": "text/xml" });
+    res.end(twiml.toString());
   }
 });
-
 
 function validateIncomingText(userTextInput) {
   userTextInput.toLowerCase();
@@ -85,9 +88,10 @@ function updateColor(incomingTextContent) {
 }
 
 app.get("/colors", async (req, res) => {
-  if(colors !== undefined) {
+  if (colors !== undefined) {
     console.log("color info is: " + colors);
-    res.json(colors); }
+    res.json(colors);
+  }
 });
 
 app.get("/hooks/sms", (req, res) => {
@@ -95,31 +99,44 @@ app.get("/hooks/sms", (req, res) => {
   res.send(data);
 });
 
-
-app.get('/colorsList', (req, res) => {
-  console.log("colorlist requested")
+app.get("/colorsList", (req, res) => {
+  console.log("colorlist requested");
   let colorResults = fiveColorArray();
-  console.log(colorResults)
+  console.log(colorResults);
   res.json(colorResults);
-})
+});
+
+app.get("/startcolor", (req, res) => {
+  console.log("/startcolor hit");
+  client.messages.list({ limit: 1 }).then(messages =>
+    messages.forEach(m => {
+      let startColorResult = validateIncomingText(m.body);
+      console.log(startColorResult, "startColorResult");
+      res.json(startColorResult);
+    })
+  );
+});
 
 function fiveColorArray() {
   let fiveColors = [];
-  for(let i = 1; i <= 5; i += 1) {
-    let randomElement = getRandomInt(CssColorNames.length - 1 );
-    fiveColors.push(CssColorNames[randomElement])
+  for (let i = 1; i <= 5; i += 1) {
+    let randomElement = getRandomInt(CssColorNames.length - 1);
+    fiveColors.push(CssColorNames[randomElement]);
   }
-  return fiveColors
+  return fiveColors;
 }
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-// client.messages.list({limit: 20})
-//                .then(messages => messages.forEach(m =>
-//         console.log(m.sid, m.status, m.dateSent, m.to, m.price )));
-
+client.messages
+  .list({ limit: 3 })
+  .then(messages =>
+    messages.forEach(m =>
+      console.log(m.sid, m.status, m.dateSent, m.to, m.price, m.body)
+    )
+  );
 
 const CssColorNames = [
   "AliceBlue",
