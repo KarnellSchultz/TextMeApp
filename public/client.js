@@ -41,15 +41,15 @@ let showColors = new Vue({
   }
 });
 
-let secret = new Vue({
-  el: "#secret",
-  data: {
-    message: ""
+
+
+new Vue({ el: '#more-button',
+  methods: {
+    color: function() {
+      vueListUpdate()
+    }
   }
-})
-
-
-moreColorsButton.addEventListener("click", vueListUpdate);
+  })
 
 vueListUpdate();
 async function vueListUpdate() {

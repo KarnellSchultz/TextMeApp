@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
 
-    <title>SMS Colors By:K.Schultz</title>
+    <title>SMS Colors</title>
 </head>
 <body id="body">
     <div id="page" class="page">
@@ -54,20 +54,21 @@
       <h3 class="h3 mt-4">Step:1</h4></step:1>
     <p > Text a color to this number to change the page's color: </p>
       <h3 
-      class="number h2 shadow p-3 rounded"
+      class="number bg-light h2 shadow p-3 rounded"
       >+14257287345</h3></p>
     <step:2 class="section step"> <h4>Step:2 </h4></step:2>
     <p>Wait for the page to change color OR Click the "Update Page Color" button</p>
   </div>
-  <div id="lastUpdated" class="mt-5 badge badge-warning text-wrap shadow p-3  rounded ">
-    <p >Current Color is:
+  <div id="lastUpdated" 
+      class="container progress-bar progress-bar-striped bg-info mt-5 mb-2 h4 shadow w-50 p-3 rounded ">
+      <p >Current Color: </p>
       <p id="upcomingcolor"> </p>
-    </p>
+   
   </div>
   <div class="section">  
   <div class=" d-flex justify-content-center">
     <button 
-    class="btn btn-primary btn-lg text-wrap shadow p-3 rounded"
+    class="btn btn-primary btn text-wrap shadow p-3 rounded"
     type="button" id="updateColor"  >
  Update page Color
     </button>
@@ -77,23 +78,23 @@
 <p> Can't think of a cool color? Below is a list of colors you can text to update this pages background color. </p> 
 </div>
  
-  <div class="section vueList" >
-    <ul id="vueList">
-      <li v-for="item in items"  id="color-list-item">
-        {{item.message}}
-      </li>
-    </ul>
-  </div>
 
-    <div class="section ">  
-        <div class=" d-flex justify-content-center">
-          <button
-          class="btn btn-primary btn-lg shadow p-3 rounded"
-          type="button" id="more-colors-button" >
-              More Colors! PLS
-          </button>
-     </div>   
-    </div> 
+<div class="container ">  
+  <div class=" d-flex justify-content-center">
+    <div id="more-button">
+      <button class="btn btn-primary" v-on:click="color()"> More Colors </button>
+    </div>
+  </div>   
+</div> 
+
+<div class=" container vueList" >
+  <ul id="vueList">
+    <li v-for="item in items"  id="color-list-item">
+      {{item.message}}
+    </li>
+  </ul>
+</div>
+
 <!-- below div is container end -->
   </div>
 <!--   <div class="section secret" id="secret">
@@ -104,6 +105,8 @@
   <input v-model="message">
     
   </div> -->
+
+
 
    <div class="section footer-container">
         <div class="footer">
@@ -120,7 +123,7 @@
 
 <!-- below is the closing page tag, don't remove -->
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
      <script src="client.js"></script>
     

@@ -36,6 +36,9 @@ app.post("/hooks/sms", async (req, res) => {
   console.log(req.body);
   let incomingTextContent = await req.body.Body;
   let inputColor = validateIncomingText(incomingTextContent);
+
+  let { boody } = req.body;
+  console.log(boody)
   
   //attempting to protect against users sending bad inputs and a sms sending anyway.
   if (inputColor == undefined) {
@@ -43,7 +46,7 @@ app.post("/hooks/sms", async (req, res) => {
    db.insert({
      status: "404",
      error: incomingTextContent, 
-    request: req.body,
+    request: [req.body.ToCountry,req.body.ToState, req.body.SmsStatus, req.body.Body ,],
     timestamp: new Date().toLocaleDateString()})
   } else {
     db.insert({
