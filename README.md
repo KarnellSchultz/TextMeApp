@@ -9,11 +9,13 @@ public/
   Index.html is the main html file
   client.js is the client side JavaScript file
   
-Server.js is the serverside node express Javascript code
+Server.js is the serverside node express Javascript code 
 
 using Twilio to send and receive SMS > also adding the content of the SMS to the html
 
 The app is at a solid 1.0 level right now.
 
 
-Check out my project live on Glitch: https://glitch.com/~smscolors
+## Check out my project live on Glitch: https://smscolors.glitch.me/
+
+Want to see the code : https://glitch.com/edit/#!/smscolors
