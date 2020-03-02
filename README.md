@@ -7,6 +7,10 @@
 - Express / Node
 - *A little Vue too*
 
+## Gif of the app in action
+
+![text me app in action](https://media.giphy.com/media/WRirUUBDig7WXl4keP/giphy.gif)
+
 ### How it works
 
 - Text a color to this phone number: `+14257287345`
